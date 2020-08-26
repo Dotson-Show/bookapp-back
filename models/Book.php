@@ -40,12 +40,12 @@ class Book {
         return $stmt;
     }
 
-    public function readSingle() {
-        $sql = 'SELECT * FROM ' . $this->table. 'WHERE id = ?';
+    public function readSingle($book_id) {
+        $sql = 'SELECT * FROM ' . $this->table. ' WHERE id = ?';
 
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(1, $this->id);
-        $stmt->execute();
+        // $stmt->bindParam(1, $book_id);
+        $stmt->execute([$book_id]);
         return $stmt;
     }
 }
