@@ -21,18 +21,6 @@ class Book {
 
     //Get books
     public function read() {
-        // $sql = 'SELECT 
-        //     b.id,
-        //     b.name,
-        //     b.isbn,
-        //     b.authors,
-        //     b.numOfPages,
-        //     b.comments,
-        //     b.characters,
-        //     b.yearPublished
-        // FROM
-        //     '. $this->table . ' b 
-        // LEFT JOIN';
         $sql = 'SELECT * FROM ' . $this->table;
 
         $stmt = $this->conn->prepare($sql);
@@ -40,12 +28,14 @@ class Book {
         return $stmt;
     }
 
+    //Get a single book
     public function readSingle($book_id) {
         $sql = 'SELECT * FROM ' . $this->table. ' WHERE id = ?';
 
         $stmt = $this->conn->prepare($sql);
-        // $stmt->bindParam(1, $book_id);
-        $stmt->execute([$book_id]);
+        $stmt->bindParam(1, $book_id);
+        $stmt->execute();
         return $stmt;
     }
+
 }
