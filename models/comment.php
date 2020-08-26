@@ -19,13 +19,52 @@ class Comment {
     }
 
     //Get Comments List
-    public function readComments() {
-        $sql = 'SELECT * FROM ' . $this->table . 
-            'WWHERE book_id = ? ORDER BY created_at DESC';
+    public function readComments($book_id) {
+        $sql = 'SELECT * FROM ' . $this->table. ' WHERE book_id = ? ORDER BY created_at DESC';
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind(1, $this->book_id);
+
+        $this->book_id = $book_id;
+        $stmt->bindParam(1, $this->book_id);
         $stmt->execute();
         return $stmt;
+    }
+
+    public function getCommentCount($book_id) {
+        $commentResults = $this->readComments($book_id);
+        return $commentResults->rowCount();
+    }
+
+    public function getComments($book_id) {
+        $commentResults = $this->readComments($book_id);
+        $commentRowCount = $commentResults->rowCount();
+
+        if ($commentRowCount > 0) {
+            
+            $commentsArray = array();
+        
+            while ($row = $commentResults->fetch(PDO::FETCH_ASSOC)) {
+                extract($row);
+        
+                $comment_item = array(
+                    'id' => $id,
+                    'book_id' => $book_id,
+                    'title' => $title,
+                    'content' => $content,
+                    'commenter_pub_ip' => $commenter_pub_ip,
+                    'created_at' => $created_at
+                );
+        
+                //Push to Data array
+                array_push($commentsArray, $comment_item);
+            }
+        
+            //Turn to json and output
+            return $commentsArray;
+        } else {
+            //No Books
+            return array('message' => 'No Comments Found');
+        }
+        
     }
 
     //Create Comments

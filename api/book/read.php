@@ -5,14 +5,17 @@ header('Content-Type: application/json');
 
 include_once '../../config/Database.php';
 include_once '../../models/Book.php';
+include_once '../../models/Comment.php';
 
 //Instantiate DB & Connect
 $database = new Database();
 $db = $database->connect();
 
+//Instantiate comment object
+$comment = new Comment($db);
+
 //Instantiate book object
 $book = new Book($db);
-
 $bookResults = $book->read();
 $rowCount = $bookResults->rowCount();
 
@@ -23,6 +26,8 @@ if ($rowCount > 0) {
 
     while ($row = $bookResults->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
+        $book_id = $id;
+        $commentCount = $comment->getCommentCount($book_id);
 
         $book_item = array(
             'id' => $id,
@@ -30,7 +35,8 @@ if ($rowCount > 0) {
             'isbn' => $isbn,
             'authors' => $authors,
             'numOfPages' => $numOfPages,
-            // 'comments' => $comments,
+            'commentCount' => $commentCount,
+            'comments' => $comment->getComments($book_id),
             // 'characters' => $characters,
             'yearPublished' => $yearPublished
         );

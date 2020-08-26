@@ -38,4 +38,9 @@ class Book {
         return $stmt;
     }
 
+    // //Get Comment Count
+    // public function getCommentCount() {
+
+    // }
+
 }
