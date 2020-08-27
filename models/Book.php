@@ -21,7 +21,7 @@ class Book {
 
     //Get books
     public function read() {
-        $sql = 'SELECT * FROM ' . $this->table;
+        $sql = 'SELECT * FROM ' . $this->table. ' ORDER BY yearPublished';
 
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();

@@ -27,7 +27,7 @@ if ($rowCount > 0) {
     while ($row = $bookResults->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
         $book_id = $id;
-        $commentCount = $comment->getCommentCount($book_id);
+        $commentCount = $comment->getCommentCount($book_id); //CGet the comment count from Comment
 
         $book_item = array(
             'id' => $id,
@@ -36,7 +36,7 @@ if ($rowCount > 0) {
             'authors' => $authors,
             'numOfPages' => $numOfPages,
             'commentCount' => $commentCount,
-            'comments' => $comment->getComments($book_id),
+            'comments' => $comment->getComments($book_id), //Get a list of comments from Comments in reversed chronological order
             // 'characters' => $characters,
             'yearPublished' => $yearPublished
         );
